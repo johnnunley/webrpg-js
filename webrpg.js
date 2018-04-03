@@ -33,8 +33,8 @@ webrpg.stage = 0;
  * lck = Luck
 */
 
-webrpg.Entity = function(hp,atk,def,spd,acc,dog,lck,name,x,y) {
-  if (!(this instanceof webrpg.Entity)) return new webrpg.Entity(hp,atk,def,spd,acc,dog,lck,name,x,y);
+webrpg.Entity = function(hp,atk,def,spd,acc,dog,lck,name,x,y,color) {
+  if (!(this instanceof webrpg.Entity)) return new webrpg.Entity(hp,atk,def,spd,acc,dog,lck,name,x,y,color);
 
   this.hp = hp;
   this.atk = atk;
@@ -46,6 +46,7 @@ webrpg.Entity = function(hp,atk,def,spd,acc,dog,lck,name,x,y) {
   this.name = name;
   this.x = x;
   this.y = y;
+  this.color = color;
 };
 
 webrpg.Entity.prototype.damage = function(dmg) {
@@ -95,10 +96,22 @@ webrpg.Room = function(width,height) {
 };
 
 webrpg.rooms = [];
+webrpg.currentRoom = null;
+
+webrpg.Cutscene = function(cutscenes) {
+  if (!(this instanceof webrpg.Cutscene)) return new webrpg.Cutscene(cutscenes);
+ 
+  this.cutscenes = cutscenes;
+};
+
+// note: NEEDS to be set, otherwise the entire game will crash
+webrpg.startingCutscene = null;
 
 webrpg.frameProperties = {
   frameCSS: 'border: dashed 1px #2d8bc9; width: 600px; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999';
   cellCSS: 'width: 33%';
+
+  rmCharacter: '█'; 
 };
 
 webrpg._internalFunctions.createButton = function(form,text) {
@@ -146,7 +159,7 @@ webrpg.Frame = function(container) {
 
   var buttonRow2 = document.createElement("TR");
   var leftArrowCont = document.createElement("TD");
-  this leftArrow = webrpg._internalFunctions.createButton(leftArrowCont,"←");
+  this.leftArrow = webrpg._internalFunctions.createButton(leftArrowCont,"←");
   buttonRow2.appendChild(leftArrowCont); 
   var downArrowCont = document.createElement("TD");
   this.downArrow = webrpg._internalFunctions.createButton(downArrowCont,"↓");
@@ -177,4 +190,115 @@ webrpg.Frame = function(container) {
   table.appendChild(tbody);
   this.container.appendChild(table);
   container.appendChild(this.container);
+
+  this.stage = webrpg.stage;
+  this.cutscene = webrpg.startingCutscene;
+  this.room = webrpg.currentRoom;
+};
+
+webrpg.Frame.prototype.clearMiddleFrame = function() {
+  while (this.middleCell.firstChild) {
+    this.middleCell.removeChild(this.middleCell.firstChild);
+  }
+};
+
+webrpg.Frame.prototype.displayCutscene = function() {
+   this.cutsceneText.innerHTML = this.cutscene.cutscenes[this.cutsceneIndex];
+};
+
+webrpg.Frame.prototype.assignButtonCallback = function() {
+  if (this.cutsceneIndex < this.cutscene.cutscenes.size() - 1) {
+    this.advancebutton.onclick = function() { this.advanceCutscene(); };
+  }
+  else {
+    this.advancebutton.onclick = function() { this.startGame(); };
+  }
+};
+
+webrpg.Frame.prototype.runCutscene = function() {
+  this.stage = 0;
+  this.cutsceneIndex = 0;
+  this.clearMiddleFrame();
+  this.cutsceneText = document.createElement("P");
+  this.displayCutscene(); 
+
+  var form = document.createElement("FORM");
+  var center = document.createElement("CENTER");
+  this.advancebutton = webrpg._internalFunctions.createButton(center,"Next");
+  this.assignButtonCallback();
+  form.appendChild(center);
+  this.middleCell.appendChild(this.cutsceneText);
+  this.middleCell.appendChild(form);
+};
+
+webrpg.Frame.prototype.advanceCutscene = function() {
+  this.cutsceneIndex++;
+  this.displayCutscene();
+  this.assignButtonCallback();
+};
+
+webrpg._internalFunctions.roomArray = function(width,height) {
+  var rm = [];
+  for (var i = 0; i < width; i++) {
+    var rmRow = [];
+    for (var j = 0; j < height; j+) {
+      rmRow[j] = webrpg.frameProperties.rmCharacter;
+    }
+    rm[i] = rmRow;
+  }
+  return rm;
+};
+
+webrpg.Frame.prototype.render = function() {
+  var room = webrpg._internalFunctions.roomArray(this.room.width,this.room.height);
+  for (var i = 0; i < this.room.entities.size(); i++) {
+    var entity = this.room.entities[i];
+    room[x][y] = '<span style="color: ' + entity.color '">' + webrpg.frameProperties.rmCharacter + '</span>';
+  }
+  for (var i = 0; i < room.size(); i++) {
+    var str = '';
+    var row = room[i];
+    for (var j = 0; j < row.size(); j++) {
+      str += row[j];
+      str += ' ';
+    }
+    this.roomBox.innerHTML += str;
+    this.roomBox.innerHTML += "<br />";
+  }
+};
+
+webrpg.Frame.prototype.movePlayer = function(direction) {
+  if (direction === "left") {
+    webrpg.player.x -= 1;
+    if (webrpg.player.x < 0) webrpg.player.x = 0;
+  }
+  else if (direction === "right") {
+    webrpg.player.x += 1;
+    if (webrpg.player.x >= this.room.width) webrpg.player.x = this.room.width - 1;
+  }
+  else if (direction === "up") {
+    webrpg.player.y -= 1;
+    if (webrpg.player.y < 0) webrpg.player.y = 0;
+  }
+  else if (direction === "down") {
+    webrpg.player.y += 1;
+    if (webrpg.player.y >= this.room.height) webrpg.player.y = this.room.height - 1;
+  }
+  this.render();
+};
+
+webrpg.Frame.prototype.startGame = function() {
+  this.stage = 1;
+  this.clearMiddleFrame();
+  this.roomBox = document.createElement("P");
+  this.middleCell.appendChild(this.roomBox);
+  this.upButton.onclick = function() { this.movePlayer("up"); };
+  this.leftButton.onclick = function() { this.movePlayer("left"); };
+  this.downButton.onclick = function() { this.movePlayer("down"); };
+  this.rightButton.onclick = function() { this.movePlayer("right"); };
+};
+
+webrpg.Frame.prototype.start = function() {
+  this.stage = 0;
+  this.runCutscene();
 };
