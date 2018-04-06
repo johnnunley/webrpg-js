@@ -207,7 +207,7 @@ webrpg.Frame.prototype.startGame = function() { };
 
 webrpg.Frame.prototype.assignButtonCallback = function() {
   if (this.cutsceneIndex < this.cutscene.cutscenes.length - 1) {
-    this.advancebutton.onclick = function() { advanceCutscene(frame); };
+    this.advancebutton.onclick = function() { advanceCutscene(this); };
   }
   else {
     this.advancebutton.onclick = function() { this.startGame(); };
