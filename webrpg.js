@@ -203,7 +203,7 @@ webrpg.Frame.prototype.displayCutscene = function() {
 };
 
 webrpg.Frame.prototype.assignButtonCallback = function() {
-  if (this.cutsceneIndex < this.cutscene.cutscenes.size() - 1) {
+  if (this.cutsceneIndex < this.cutscene.cutscenes.length - 1) {
     this.advancebutton.onclick = function() { this.advanceCutscene(); };
   }
   else {
@@ -247,14 +247,14 @@ webrpg._internalFunctions.roomArray = function(width,height) {
 
 webrpg.Frame.prototype.render = function() {
   var room = webrpg._internalFunctions.roomArray(this.room.width,this.room.height);
-  for (var i = 0; i < this.room.entities.size(); i++) {
+  for (var i = 0; i < this.room.entities.length; i++) {
     var entity = this.room.entities[i];
     room[x][y] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
   }
-  for (var i = 0; i < room.size(); i++) {
+  for (var i = 0; i < room.length; i++) {
     var str = '';
     var row = room[i];
-    for (var j = 0; j < row.size(); j++) {
+    for (var j = 0; j < row.length; j++) {
       str += row[j];
       str += ' ';
     }
