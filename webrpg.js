@@ -1,23 +1,19 @@
 /*
-
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 // library object used to contain functions
 var webrpg = {
-  _internalFunctions = {};
+  _internalFunctions: {}
 };
 
 webrpg.stage = 0;
@@ -108,10 +104,10 @@ webrpg.Cutscene = function(cutscenes) {
 webrpg.startingCutscene = null;
 
 webrpg.frameProperties = {
-  frameCSS: 'border: dashed 1px #2d8bc9; width: 600px; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999';
-  cellCSS: 'width: 33%';
+  frameCSS: 'border: dashed 1px #2d8bc9; width: 600px; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999',
+  cellCSS: 'width: 33%',
 
-  rmCharacter: '█'; 
+  rmCharacter: '█'
 };
 
 webrpg._internalFunctions.createButton = function(form,text) {
@@ -241,7 +237,7 @@ webrpg._internalFunctions.roomArray = function(width,height) {
   var rm = [];
   for (var i = 0; i < width; i++) {
     var rmRow = [];
-    for (var j = 0; j < height; j+) {
+    for (var j = 0; j < height; j++) {
       rmRow[j] = webrpg.frameProperties.rmCharacter;
     }
     rm[i] = rmRow;
@@ -253,7 +249,7 @@ webrpg.Frame.prototype.render = function() {
   var room = webrpg._internalFunctions.roomArray(this.room.width,this.room.height);
   for (var i = 0; i < this.room.entities.size(); i++) {
     var entity = this.room.entities[i];
-    room[x][y] = '<span style="color: ' + entity.color '">' + webrpg.frameProperties.rmCharacter + '</span>';
+    room[x][y] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
   }
   for (var i = 0; i < room.size(); i++) {
     var str = '';
