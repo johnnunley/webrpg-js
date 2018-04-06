@@ -207,11 +207,12 @@ webrpg.Frame.prototype.startGame = function() { console.log("fatal error"); };
 webrpg.Frame.prototype.advanceCutscene = function() { console.log("fatal error"); };
 
 webrpg.Frame.prototype.assignButtonCallback = function() {
+  var frame = this;
   if (this.cutsceneIndex < this.cutscene.cutscenes.length - 1) {
-    this.advancebutton.onclick = function() { this.advanceCutscene(); };
+    this.advancebutton.onclick = function() { frame.advanceCutscene(); };
   }
   else {
-    this.advancebutton.onclick = function() { this.startGame(); };
+    this.advancebutton.onclick = function() { frame.startGame(); };
   }
 };
 
