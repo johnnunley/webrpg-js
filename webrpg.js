@@ -203,11 +203,12 @@ webrpg.Frame.prototype.displayCutscene = function() {
 };
 
 // prototype function
-webrpg.Frame.prototype.startGame = function() { };
+webrpg.Frame.prototype.startGame = function() { console.log("fatal error"); };
+webrpg.Frame.prototype.advanceCutscene = function() { console.log("fatal error"); };
 
 webrpg.Frame.prototype.assignButtonCallback = function() {
   if (this.cutsceneIndex < this.cutscene.cutscenes.length - 1) {
-    this.advancebutton.onclick = function() { advanceCutscene(this); };
+    this.advancebutton.onclick = function() { this.advanceCutscene(); };
   }
   else {
     this.advancebutton.onclick = function() { this.startGame(); };
@@ -230,10 +231,10 @@ webrpg.Frame.prototype.runCutscene = function() {
   this.middleCell.appendChild(form);
 };
 
-function advanceCutscene(frame) {
-  frame.cutsceneIndex++;
-  frame.displayCutscene();
-  frame.assignButtonCallback();
+webrpg.Frame.prototype.advanceCutscene = function() {
+  this.cutsceneIndex++;
+  this.displayCutscene();
+  this.assignButtonCallback();
 };
 
 webrpg._internalFunctions.roomArray = function(width,height) {
