@@ -104,7 +104,7 @@ webrpg.Cutscene = function(cutscenes) {
 webrpg.startingCutscene = null;
 
 webrpg.frameProperties = {
-  frameCSS: 'border: dashed 1px #2d8bc9; width: 100%; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999',
+  frameCSS: 'border: dashed 1px #2d8bc9; width: 600px; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999',
   cellCSS: 'border: solid 1px black; width: ',
 
   rmCharacter: '█'
@@ -137,8 +137,11 @@ webrpg.Frame = function(container) {
   this.middleCell = document.createElement("TD");
   this.rightCell = document.createElement("TD");
   this.leftCell.setAttribute("style",webrpg.frameProperties.cellCSS + '25%'); 
-  this.middleCell.setAttribute("style",webrpg.frameProperties.cellCSS + '50%');
-  this.rightCell.setAttribute("style",webrpg.frameProperties.cellCSS + '25%');
+  this.middleCell.setAttribute("style",webrpg.frameProperties.cellCSS + '75%');
+//  this.rightCell.setAttribute("style",webrpg.frameProperties.cellCSS + '25%');
+  this.gameBox = document.createElement("DIV");
+  this.middleCell.appendChild(this.gameBox);
+  var actionBoxDiv = document.createElement("DIV");
 
   var form = document.createElement("FORM");
   this.interactButton = webrpg._internalFunctions.createButton(form,"Interact");
@@ -177,11 +180,12 @@ webrpg.Frame = function(container) {
   this.actionBox.setAttribute("overflow","scroll");
   this.actionBox.setAttribute("style",webrpg.frameProperties.frameCSS);
   actionBoxContainer.appendChild(this.actionBox);
-  this.rightCell.appendChild(actionBoxContainer);
+  actionBoxDiv.appendChild(actionBoxContainer);
+  this.middleCell.appendChild(actionBoxDiv);
 
   trow.appendChild(this.leftCell);
   trow.appendChild(this.middleCell);
-  trow.appendChild(this.rightCell);
+//  trow.appendChild(this.rightCell);
   tbody.appendChild(trow);
   table.appendChild(tbody);
   this.container.appendChild(table);
