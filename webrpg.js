@@ -104,8 +104,9 @@ webrpg.Cutscene = function(cutscenes) {
 webrpg.startingCutscene = null;
 
 webrpg.frameProperties = {
-  frameCSS: 'border: dashed 1px #2d8bc9; width: 600px; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999',
+  frameCSS: 'border: dashed 1px #2d8bc9; width: 600px; height: 600px; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999',
   cellCSS: 'border: solid 1px black; width: ',
+  centerCSS: 'float: center',
 
   rmCharacter: '█'
 };
@@ -145,6 +146,7 @@ webrpg.Frame = function(container) {
 
   var form = document.createElement("FORM");
   this.interactButton = webrpg._internalFunctions.createButton(form,"Interact");
+  this.interactButton.setAttribute("style", webrpg.frameProperties.centerCSS);
   
   this.buttonTable = document.createElement("TABLE");
   var buttonTBody = document.createElement("TBODY");
@@ -225,6 +227,7 @@ webrpg.Frame.prototype.runCutscene = function() {
   this.cutsceneIndex = 0;
   this.clearMiddleFrame();
   this.cutsceneText = document.createElement("P");
+  this.cutsceneText.setAttribute("style",webrpg.frameProperties.centerCSS);
   this.displayCutscene(); 
 
   var form = document.createElement("FORM");
