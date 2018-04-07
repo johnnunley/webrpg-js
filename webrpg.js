@@ -258,7 +258,7 @@ webrpg.Frame.prototype.render = function() {
   var room = webrpg._internalFunctions.roomArray(this.room.width,this.room.height);
   for (var i = 0; i < this.room.entities.length; i++) {
     var entity = this.room.entities[i];
-    room[x][y] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
+    room[entity.x][entity.y] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
   }
   for (var i = 0; i < room.length; i++) {
     var str = '';
