@@ -104,8 +104,8 @@ webrpg.Cutscene = function(cutscenes) {
 webrpg.startingCutscene = null;
 
 webrpg.frameProperties = {
-  frameCSS: 'border: dashed 1px #2d8bc9; width: 600px; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999',
-  cellCSS: 'width: 33%',
+  frameCSS: 'border: dashed 1px #2d8bc9; width: 100%; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999',
+  cellCSS: 'border: solid 1px black; width: ',
 
   rmCharacter: '█'
 };
@@ -136,9 +136,9 @@ webrpg.Frame = function(container) {
   this.leftCell = document.createElement("TD");
   this.middleCell = document.createElement("TD");
   this.rightCell = document.createElement("TD");
-  this.leftCell.setAttribute("style",webrpg.frameProperties.cellCSS); 
-  this.middleCell.setAttribute("style",webrpg.frameProperties.cellCSS);
-  this.rightCell.setAttribute("style",webrpg.frameProperties.cellCSS);
+  this.leftCell.setAttribute("style",webrpg.frameProperties.cellCSS + '25%'); 
+  this.middleCell.setAttribute("style",webrpg.frameProperties.cellCSS + '50%');
+  this.rightCell.setAttribute("style",webrpg.frameProperties.cellCSS + '25%');
 
   var form = document.createElement("FORM");
   this.interactButton = webrpg._internalFunctions.createButton(form,"Interact");
@@ -293,10 +293,11 @@ webrpg.Frame.prototype.startGame = function() {
   this.clearMiddleFrame();
   this.roomBox = document.createElement("P");
   this.middleCell.appendChild(this.roomBox);
-  this.upArrow.onclick = function() { this.movePlayer("up"); };
-  this.leftArrow.onclick = function() { this.movePlayer("left"); };
-  this.downArrow.onclick = function() { this.movePlayer("down"); };
-  this.rightArrow.onclick = function() { this.movePlayer("right"); };
+  var frame = this;
+  this.upArrow.onclick = function() { frame.movePlayer("up"); };
+  this.leftArrow.onclick = function() { frame.movePlayer("left"); };
+  this.downArrow.onclick = function() { frame.movePlayer("down"); };
+  this.rightArrow.onclick = function() { frame.movePlayer("right"); };
 };
 
 webrpg.Frame.prototype.start = function() {
