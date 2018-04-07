@@ -148,7 +148,7 @@ webrpg.Frame = function(container) {
 
   var form = document.createElement("FORM");
   var cnter = document.createElement("CENTER");
-  this.interactButton = webrpg._internalFunctions.createButton(cntr,"Interact");
+  this.interactButton = webrpg._internalFunctions.createButton(cnter,"Interact");
   this.interactButton.setAttribute("style", webrpg.frameProperties.centerCSS);
   form.appendChild(cnter);
   
