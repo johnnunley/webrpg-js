@@ -250,9 +250,9 @@ webrpg._internalFunctions.roomArray = function(width,height) {
   for (var i = 0; i < width; i++) {
     var rmRow = [];
     for (var j = 0; j < height; j++) {
-      rmRow[j] = webrpg.frameProperties.rmCharacter;
+      rmRow.push(webrpg.frameProperties.rmCharacter);
     }
-    rm[i] = rmRow;
+    rm.push(rmRow);
   }
   return rm;
 };
@@ -261,11 +261,11 @@ webrpg.Frame.prototype.render = function() {
   var room = webrpg._internalFunctions.roomArray(this.room.width,this.room.height);
   for (var i = 0; i < this.room.entities.length; i++) {
     var entity = this.room.entities[i];
-    room.tiles[entity.x][entity.y] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
+    room[entity.x][entity.y] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
   }
   for (var i = 0; i < room.length; i++) {
     var str = '';
-    var row = room.tiles[i];
+    var row = room[i];
     for (var j = 0; j < row.length; j++) {
       str += row[j];
       str += ' ';
