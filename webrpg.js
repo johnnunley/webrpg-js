@@ -258,10 +258,10 @@ webrpg._internalFunctions.roomArray = function(width,height) {
 };
 
 webrpg.Frame.prototype.render = function() {
+  this.roomBox.innerHTML = '';
   var room = webrpg._internalFunctions.roomArray(this.room.width,this.room.height);
   for (var i = 0; i < this.room.entities.length; i++) {
     var entity = this.room.entities[i];
-    console.log(entity);
     room[entity.x][entity.y] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
   }
   for (var i = 0; i < room.length; i++) {
@@ -306,6 +306,7 @@ webrpg.Frame.prototype.startGame = function() {
   this.leftArrow.onclick = function() { frame.movePlayer("left"); };
   this.downArrow.onclick = function() { frame.movePlayer("down"); };
   this.rightArrow.onclick = function() { frame.movePlayer("right"); };
+  this.render();
 };
 
 webrpg.Frame.prototype.start = function() {
