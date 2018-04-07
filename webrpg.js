@@ -147,8 +147,10 @@ webrpg.Frame = function(container) {
   var actionBoxDiv = document.createElement("DIV");
 
   var form = document.createElement("FORM");
-  this.interactButton = webrpg._internalFunctions.createButton(form,"Interact");
+  var cnter = document.createElement("CENTER");
+  this.interactButton = webrpg._internalFunctions.createButton(cntr,"Interact");
   this.interactButton.setAttribute("style", webrpg.frameProperties.centerCSS);
+  form.appendChild(cnter);
   
   this.buttonTable = document.createElement("TABLE");
   var buttonTBody = document.createElement("TBODY");
@@ -185,6 +187,8 @@ webrpg.Frame = function(container) {
   this.actionBox.setAttribute("style",webrpg.frameProperties.frameCSS);
   actionBoxContainer.appendChild(this.actionBox);
   actionBoxDiv.appendChild(actionBoxContainer);
+  var hr = document.createElement("HR");
+  this.middleCell.appendChild(hr);
   this.middleCell.appendChild(actionBoxDiv);
 
   trow.appendChild(this.leftCell);
@@ -237,7 +241,9 @@ webrpg.Frame.prototype.runCutscene = function() {
   this.advancebutton = webrpg._internalFunctions.createButton(center,"Next");
   this.assignButtonCallback();
   form.appendChild(center);
-  this.gameBox.appendChild(this.cutsceneText);
+  var center2 = document.createElement("CENTER");
+  center2.appendChild(this.cutsceneText);
+  this.gameBox.appendChild(center2);
   this.gameBox.appendChild(form);
 };
 
@@ -302,7 +308,9 @@ webrpg.Frame.prototype.startGame = function() {
   this.stage = 1;
   this.clearMiddleFrame();
   this.roomBox = document.createElement("P");
-  this.gameBox.appendChild(this.roomBox);
+  var center = document.createElement("CENTER");
+  center.appendChild(this.roomBox);
+  this.gameBox.appendChild(center);
   var frame = this;
   this.upArrow.onclick = function() { frame.movePlayer("up"); };
   this.leftArrow.onclick = function() { frame.movePlayer("left"); };
