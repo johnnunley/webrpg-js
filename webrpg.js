@@ -293,10 +293,10 @@ webrpg.Frame.prototype.startGame = function() {
   this.clearMiddleFrame();
   this.roomBox = document.createElement("P");
   this.middleCell.appendChild(this.roomBox);
-  this.upButton.onclick = function() { this.movePlayer("up"); };
-  this.leftButton.onclick = function() { this.movePlayer("left"); };
-  this.downButton.onclick = function() { this.movePlayer("down"); };
-  this.rightButton.onclick = function() { this.movePlayer("right"); };
+  this.upArrow.onclick = function() { this.movePlayer("up"); };
+  this.leftArrow.onclick = function() { this.movePlayer("left"); };
+  this.downArrow.onclick = function() { this.movePlayer("down"); };
+  this.rightArrow.onclick = function() { this.movePlayer("right"); };
 };
 
 webrpg.Frame.prototype.start = function() {
