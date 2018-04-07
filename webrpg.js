@@ -104,7 +104,7 @@ webrpg.Cutscene = function(cutscenes) {
 webrpg.startingCutscene = null;
 
 webrpg.frameProperties = {
-  frameCSS: 'border: dashed 1px #2d8bc9; width: 600px; height: 600px; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999',
+  frameCSS: 'border: dashed 1px #2d8bc9; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999',
   cellCSS: 'border: solid 1px black; width: ',
   centerCSS: 'float: center',
   gameBoxCSS: 'padding: 5px 5px 5px 5px',
@@ -130,7 +130,7 @@ webrpg.Frame = function(container) {
   if (!(this instanceof webrpg.Frame)) return new webrpg.Frame(container);
 
   this.container = document.createElement("BLOCKQUOTE");
-  this.container.setAttribute("style",webrpg.frameProperties.frameCSS);
+  this.container.setAttribute("style",webrpg.frameProperties.frameCSS + "width: 600px; height: 200pxv;");
 
   var table = document.createElement("TABLE");
   var tbody = document.createElement("TBODY");
