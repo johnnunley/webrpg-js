@@ -107,6 +107,7 @@ webrpg.frameProperties = {
   frameCSS: 'border: dashed 1px #2d8bc9; width: 600px; height: 600px; padding: 5px 15px; margin: 10px 10px 10px 35px; background-color: #f4f4f4; border-color: #999999',
   cellCSS: 'border: solid 1px black; width: ',
   centerCSS: 'float: center',
+  gameBoxCSS: 'padding: 5px 5px 5px 5px',
 
   rmCharacter: '█'
 };
@@ -141,6 +142,7 @@ webrpg.Frame = function(container) {
   this.middleCell.setAttribute("style",webrpg.frameProperties.cellCSS + '75%');
 //  this.rightCell.setAttribute("style",webrpg.frameProperties.cellCSS + '25%');
   this.gameBox = document.createElement("DIV");
+  this.gameBox.setAttribute("style",webrpg.frameProperties.gameBoxCSS);
   this.middleCell.appendChild(this.gameBox);
   var actionBoxDiv = document.createElement("DIV");
 
@@ -199,8 +201,8 @@ webrpg.Frame = function(container) {
 };
 
 webrpg.Frame.prototype.clearMiddleFrame = function() {
-  while (this.middleCell.firstChild) {
-    this.middleCell.removeChild(this.middleCell.firstChild);
+  while (this.gameBox.firstChild) {
+    this.gameBox.removeChild(this.gameBox.firstChild);
   }
 };
 
@@ -235,8 +237,8 @@ webrpg.Frame.prototype.runCutscene = function() {
   this.advancebutton = webrpg._internalFunctions.createButton(center,"Next");
   this.assignButtonCallback();
   form.appendChild(center);
-  this.middleCell.appendChild(this.cutsceneText);
-  this.middleCell.appendChild(form);
+  this.gameBox.appendChild(this.cutsceneText);
+  this.gameBox.appendChild(form);
 };
 
 webrpg.Frame.prototype.advanceCutscene = function() {
@@ -262,7 +264,7 @@ webrpg.Frame.prototype.render = function() {
   var room = webrpg._internalFunctions.roomArray(this.room.width,this.room.height);
   for (var i = 0; i < this.room.entities.length; i++) {
     var entity = this.room.entities[i];
-    room[entity.x][entity.y] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
+    room[entity.y][entity.x] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
   }
   for (var i = 0; i < room.length; i++) {
     var str = '';
@@ -300,7 +302,7 @@ webrpg.Frame.prototype.startGame = function() {
   this.stage = 1;
   this.clearMiddleFrame();
   this.roomBox = document.createElement("P");
-  this.middleCell.appendChild(this.roomBox);
+  this.gameBox.appendChild(this.roomBox);
   var frame = this;
   this.upArrow.onclick = function() { frame.movePlayer("up"); };
   this.leftArrow.onclick = function() { frame.movePlayer("left"); };
