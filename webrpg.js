@@ -73,12 +73,23 @@ webrpg.Tile = function(x,y,type,cbOrRmIndex,destX,destY) {
   }
 };
 
+webrpg.Interactive = function(x,y,desc,color,collision) {
+  if (!(this instanceof webrpg.Interactive)) return new webrpg.Interactive(x,y,desc,color,collision);
+
+  this.x = x;
+  this.y = y;
+  this.desc = desc;
+  this.collision = collision | false;
+  this.color = color;
+};
+
 webrpg.Room = function(width,height) {
   if (!(this instanceof webrpg.Room)) return new webrpg.Room(width,height);
 
   this.width = width;
   this.height = height;
   this.tiles = [];
+  this.interactives = [];
 
   for (var i = 0; i < width; i++) {
     var tileRow = [];
@@ -285,6 +296,8 @@ webrpg.Frame.prototype.render = function() {
 };
 
 webrpg.Frame.prototype.movePlayer = function(direction) {
+  var px = webrpg.player.x;
+  var py = webrpg.player.y;
   if (direction === "left") {
     webrpg.player.x -= 1;
     if (webrpg.player.x < 0) webrpg.player.x = 0;
@@ -301,7 +314,39 @@ webrpg.Frame.prototype.movePlayer = function(direction) {
     webrpg.player.y += 1;
     if (webrpg.player.y >= this.room.height) webrpg.player.y = this.room.height - 1;
   }
+  for (var i = 0; i < this.room.entities.length; i++) {
+    var entity = this.room.entities[i];
+    if (entity !== webrpg.player && entity.x === webrpg.player.x && entity.y === webrpg.player.y) {
+      webrpg.player.x = px;
+      webrpg.player.y = py;
+    }
+  }
+  for (var j = 0; j < this.room.interactives.length; j++) {
+    var interactive = this.room.interactives[i];
+    if (interactive.collision && interactive.x === webrpg.player.x && interactive.y === webrpg.player.y) {
+      webrpg.player.x = px;
+      webrpg.player.y = py;
+    }
+  }
   this.render();
+};
+
+webrpg.Frame.prototype.interactMsg = "There's nothing here.";
+webrpg.Frame.prototype.interact = function() {
+  var foundSomething = false;
+  for (var i = 0; i < this.room.interactives.length; i++) {
+    var interactive = this.room.interactives[i];
+    var exactCoords = (interactive.x === webrpg.player.x && interactive.y === webrpg.player.y);
+    var onXAxis = ((interactive.x + 1 >== webrpg.player.x) && (interactive.x - 1 <== webrpg.player.x));
+    var onYAxis = ((interactive.y + 1 >== webrpg.player.y) && (interactive.y - 1 <== webrpg.player.y));
+    if (exactCoords || ((onXAxis && !onYAxis) || (!onXAxis && onYAxis))) {
+      this.actionBox.innerHTML += interactive.desc;
+      foundSomething = true
+    }
+  }
+  if (!foundSomething) {
+    this.actionBox.innerHTML += this.interactMsg;
+  }
 };
 
 webrpg.Frame.prototype.startGame = function() {
