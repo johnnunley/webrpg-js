@@ -337,8 +337,8 @@ webrpg.Frame.prototype.interact = function() {
   for (var i = 0; i < this.room.interactives.length; i++) {
     var interactive = this.room.interactives[i];
     var exactCoords = (interactive.x === webrpg.player.x && interactive.y === webrpg.player.y);
-    var onXAxis = ((interactive.x + 1 >== webrpg.player.x) && (interactive.x - 1 <== webrpg.player.x));
-    var onYAxis = ((interactive.y + 1 >== webrpg.player.y) && (interactive.y - 1 <== webrpg.player.y));
+    var onXAxis = ((interactive.x + 1 >= webrpg.player.x) && (interactive.x - 1 <= webrpg.player.x));
+    var onYAxis = ((interactive.y + 1 >= webrpg.player.y) && (interactive.y - 1 <= webrpg.player.y));
     if (exactCoords || ((onXAxis && !onYAxis) || (!onXAxis && onYAxis))) {
       this.actionBox.innerHTML += interactive.desc;
       foundSomething = true
