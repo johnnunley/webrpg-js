@@ -283,6 +283,10 @@ webrpg.Frame.prototype.render = function() {
     var entity = this.room.entities[i];
     room[entity.y][entity.x] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
   }
+  for (var i = 0; i < this.room.interactives.length; i++) {
+    var interactive = this.room.interactives[i];
+    room[interactive.y][interactive.x] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
+  }
   for (var i = 0; i < room.length; i++) {
     var str = '';
     var row = room[i];
@@ -322,7 +326,7 @@ webrpg.Frame.prototype.movePlayer = function(direction) {
     }
   }
   for (var j = 0; j < this.room.interactives.length; j++) {
-    var interactive = this.room.interactives[i];
+    var interactive = this.room.interactives[j];
     if (interactive.collision && interactive.x === webrpg.player.x && interactive.y === webrpg.player.y) {
       webrpg.player.x = px;
       webrpg.player.y = py;
