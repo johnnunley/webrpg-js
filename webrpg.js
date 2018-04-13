@@ -370,6 +370,7 @@ webrpg.Frame.prototype.startGame = function() {
   this.leftArrow.onclick = function() { frame.movePlayer("left"); };
   this.downArrow.onclick = function() { frame.movePlayer("down"); };
   this.rightArrow.onclick = function() { frame.movePlayer("right"); };
+  this.interactButton.onclick = function() { frame.interact(); };
   this.render();
 };
 
