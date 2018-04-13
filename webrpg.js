@@ -193,9 +193,10 @@ webrpg.Frame = function(container) {
   var actionBoxLabel = document.createElement("P");
   actionBoxLabel.innerHTML = "Activity Log:";
   actionBoxContainer.appendChild(actionBoxLabel);
-  this.actionBox = document.createElement("DIV");
+  this.actionBox = document.createElement("P");
   this.actionBox.setAttribute("overflow","scroll");
   this.actionBox.setAttribute("style",webrpg.frameProperties.frameCSS);
+  this.actionBox.setAttribute("id","actionBox");
   actionBoxContainer.appendChild(this.actionBox);
   actionBoxDiv.appendChild(actionBoxContainer);
   var hr = document.createElement("HR");
@@ -225,9 +226,13 @@ webrpg.Frame.prototype.displayCutscene = function() {
    this.cutsceneText.innerHTML = this.cutscene.cutscenes[this.cutsceneIndex];
 };
 
+webrpg._internalFunctions.eeError = function() {
+  alert("Haha! We have hacked your computer to make it not work! Now, Are We Cool Yet? (Seriously, this error should never show. If you're a user, god speed.)");
+};
+
 // prototype function
-webrpg.Frame.prototype.startGame = function() { console.log("fatal error"); };
-webrpg.Frame.prototype.advanceCutscene = function() { console.log("fatal error"); };
+webrpg.Frame.prototype.startGame = function() { webrpg._internalFunctions.eeError(); };
+webrpg.Frame.prototype.advanceCutscene = function() { webrpg._internalFunctions.eeError(); };
 
 webrpg.Frame.prototype.assignButtonCallback = function() {
   var frame = this;
@@ -344,12 +349,12 @@ webrpg.Frame.prototype.interact = function() {
     var onXAxis = ((interactive.x + 1 >= webrpg.player.x) && (interactive.x - 1 <= webrpg.player.x));
     var onYAxis = ((interactive.y + 1 >= webrpg.player.y) && (interactive.y - 1 <= webrpg.player.y));
     if (exactCoords || ((onXAxis && !onYAxis) || (!onXAxis && onYAxis))) {
-      this.actionBox.innerHTML += interactive.desc;
+      this.actionBox.innerHTML += interactive.desc + "<br />";
       foundSomething = true
     }
   }
   if (!foundSomething) {
-    this.actionBox.innerHTML += this.interactMsg;
+    this.actionBox.innerHTML += this.interactMsg + "<br />";
   }
 };
 
