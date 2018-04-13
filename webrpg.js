@@ -285,7 +285,7 @@ webrpg.Frame.prototype.render = function() {
   }
   for (var i = 0; i < this.room.interactives.length; i++) {
     var interactive = this.room.interactives[i];
-    room[interactive.y][interactive.x] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
+    room[interactive.y][interactive.x] = '<span style="color: ' + interactive.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
   }
   for (var i = 0; i < room.length; i++) {
     var str = '';
