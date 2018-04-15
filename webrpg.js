@@ -383,10 +383,8 @@ webrpg.Frame.prototype.interact = function() {
   var foundSomething = false;
   for (var i = 0; i < this.room.interactives.length; i++) {
     var interactive = this.room.interactives[i];
-    var exactCoords = (interactive.x === webrpg.player.x && interactive.y === webrpg.player.y);
-    var onXAxis = ((interactive.x + 1 >= webrpg.player.x) && (interactive.x - 1 <= webrpg.player.x));
-    var onYAxis = ((interactive.y + 1 >= webrpg.player.y) && (interactive.y - 1 <= webrpg.player.y));
-    if (exactCoords || ((onXAxis && !onYAxis) || (!onXAxis && onYAxis))) {
+    
+    if (interactive.isInRange(webrpg.player.x,webrpg.player.y)) {
       this.log.push(interactive.desc);
       foundSomething = true
     }
