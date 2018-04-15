@@ -83,6 +83,25 @@ webrpg.Interactive = function(x,y,desc,color,collision) {
   this.color = color;
 };
 
+webrpg.Interactive.prototype.isInRange = function(px,py) {
+  var xIsEqual = this.x === px;
+  var yIsEqual = this.y === py;
+
+  if (xIsEqual && yIsEqual) return true;
+
+  var xIsMinus = (this.x - 1) === px;
+  var yIsMinus = (this.y - 1) === py;
+  var xIsPlus  = (this.x + 1) === px;
+  var yisPlus  = (this.y + 1) === py;
+
+  var xIsAligned = xIsMinus || xIsPlus;
+  var yIsAligned = yIsMinus || yIsPlus;
+
+  if (xIsEqual && yIsAligned) return true;
+  if (yIsEqual && xIsAligned) return true;
+  return false;
+};
+
 webrpg.Room = function(width,height) {
   if (!(this instanceof webrpg.Room)) return new webrpg.Room(width,height);
 
@@ -121,6 +140,8 @@ webrpg.frameProperties = {
   gameBoxCSS: 'padding: 5px 5px 5px 5px',
 
   rmCharacter: '█'
+
+  logLength: 6;
 };
 
 webrpg._internalFunctions.createButton = function(form,text) {
@@ -214,11 +235,27 @@ webrpg.Frame = function(container) {
   this.stage = webrpg.stage;
   this.cutscene = webrpg.startingCutscene;
   this.room = webrpg.currentRoom;
+  this.log = [];
 };
 
 webrpg.Frame.prototype.clearMiddleFrame = function() {
   while (this.gameBox.firstChild) {
     this.gameBox.removeChild(this.gameBox.firstChild);
+  }
+};
+
+webrpg.Frame.prototype.updateActionLog = function() {
+  while (this.actionLog.firstChild) {
+    this.actionLog.removeChild(this.actionLog.firstChild);
+  }
+  var newLog = [];
+  for (var i = this.log.length - (webrpg.frameProperties.logLength + 1); i < this.log.length; i++) {
+    newLog.push(this.log[i]);
+  }
+  this.log = newLog;
+
+  for (var i = 0; i < this.log.length; i++) {
+    this.actionLog.innerHTML += this.log[i] + "<br />";
   }
 };
 
@@ -284,14 +321,14 @@ webrpg._internalFunctions.roomArray = function(width,height) {
 webrpg.Frame.prototype.render = function() {
   this.roomBox.innerHTML = '';
   var room = webrpg._internalFunctions.roomArray(this.room.width,this.room.height);
-  for (var i = 0; i < this.room.entities.length; i++) {
-    var entity = this.room.entities[i];
-    room[entity.y][entity.x] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
-  }
   for (var i = 0; i < this.room.interactives.length; i++) {
     var interactive = this.room.interactives[i];
     room[interactive.y][interactive.x] = '<span style="color: ' + interactive.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
   }
+  for (var i = 0; i < this.room.entities.length; i++) {
+    var entity = this.room.entities[i];
+    room[entity.y][entity.x] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
+  } 
   for (var i = 0; i < room.length; i++) {
     var str = '';
     var row = room[i];
@@ -302,6 +339,7 @@ webrpg.Frame.prototype.render = function() {
     this.roomBox.innerHTML += str;
     this.roomBox.innerHTML += "<br />";
   }
+  this.updateActionLog(); 
 };
 
 webrpg.Frame.prototype.movePlayer = function(direction) {
@@ -349,12 +387,12 @@ webrpg.Frame.prototype.interact = function() {
     var onXAxis = ((interactive.x + 1 >= webrpg.player.x) && (interactive.x - 1 <= webrpg.player.x));
     var onYAxis = ((interactive.y + 1 >= webrpg.player.y) && (interactive.y - 1 <= webrpg.player.y));
     if (exactCoords || ((onXAxis && !onYAxis) || (!onXAxis && onYAxis))) {
-      this.actionBox.innerHTML += interactive.desc + "<br />";
+      this.log.push(interactive.desc);
       foundSomething = true
     }
   }
   if (!foundSomething) {
-    this.actionBox.innerHTML += this.interactMsg + "<br />";
+    this.log.push(this.interactMsg);
   }
 };
 
