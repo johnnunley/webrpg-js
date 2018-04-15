@@ -92,7 +92,7 @@ webrpg.Interactive.prototype.isInRange = function(px,py) {
   var xIsMinus = (this.x - 1) === px;
   var yIsMinus = (this.y - 1) === py;
   var xIsPlus  = (this.x + 1) === px;
-  var yisPlus  = (this.y + 1) === py;
+  var yIsPlus  = (this.y + 1) === py;
 
   var xIsAligned = xIsMinus || xIsPlus;
   var yIsAligned = yIsMinus || yIsPlus;
