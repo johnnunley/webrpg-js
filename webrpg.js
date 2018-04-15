@@ -139,9 +139,9 @@ webrpg.frameProperties = {
   centerCSS: 'float: center',
   gameBoxCSS: 'padding: 5px 5px 5px 5px',
 
-  rmCharacter: '█'
+  rmCharacter: '█',
 
-  logLength: 6;
+  logLength: 6
 };
 
 webrpg._internalFunctions.createButton = function(form,text) {
