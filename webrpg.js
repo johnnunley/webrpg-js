@@ -255,7 +255,7 @@ webrpg.Frame.prototype.updateActionLog = function() {
   this.log = newLog;
 
   for (var i = 0; i < this.log.length; i++) {
-    this.actionBox.innerHTML += this.log[i] + "<br />";
+    if (this.log[i]) this.actionBox.innerHTML += this.log[i] + "<br />";
   }
 };
 
@@ -394,6 +394,7 @@ webrpg.Frame.prototype.interact = function() {
   if (!foundSomething) {
     this.log.push(this.interactMsg);
   }
+  this.updateActionLog();
 };
 
 webrpg.Frame.prototype.startGame = function() {
