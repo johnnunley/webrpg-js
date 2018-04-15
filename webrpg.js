@@ -245,8 +245,8 @@ webrpg.Frame.prototype.clearMiddleFrame = function() {
 };
 
 webrpg.Frame.prototype.updateActionLog = function() {
-  while (this.actionLog.firstChild) {
-    this.actionLog.removeChild(this.actionLog.firstChild);
+  while (this.actionBox.firstChild) {
+    this.actionBox.removeChild(this.actionBox.firstChild);
   }
   var newLog = [];
   for (var i = this.log.length - (webrpg.frameProperties.logLength + 1); i < this.log.length; i++) {
@@ -255,7 +255,7 @@ webrpg.Frame.prototype.updateActionLog = function() {
   this.log = newLog;
 
   for (var i = 0; i < this.log.length; i++) {
-    this.actionLog.innerHTML += this.log[i] + "<br />";
+    this.actionBox.innerHTML += this.log[i] + "<br />";
   }
 };
 
