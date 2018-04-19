@@ -83,11 +83,12 @@ webrpg.Interactive = function(x,y,desc,color,collision) {
   this.color = color;
 };
 
-webrpg.Interactive.prototype.isInRange = function(px,py) {
+webrpg.Interactive.prototype.isInRange = function(px,py,exact) {
   var xIsEqual = this.x === px;
   var yIsEqual = this.y === py;
 
   if (xIsEqual && yIsEqual) return true;
+  if (exact) return false;
 
   var xIsMinus = (this.x - 1) === px;
   var yIsMinus = (this.y - 1) === py;
@@ -138,6 +139,8 @@ webrpg.frameProperties = {
   cellCSS: 'border: solid 1px black; width: ',
   centerCSS: 'float: center',
   gameBoxCSS: 'padding: 5px 5px 5px 5px',
+
+  warpTileColor: '#6E6E6E",
 
   rmCharacter: '█',
 
@@ -264,7 +267,7 @@ webrpg.Frame.prototype.displayCutscene = function() {
 };
 
 webrpg._internalFunctions.eeError = function() {
-  alert("Haha! We have hacked your computer to make it not work! Now, Are We Cool Yet? (Seriously, this error should never show. If you're a user, god speed.)");
+  alert("Haha! We have hacked your computer to make it not work! Are We Cool Yet? (Seriously, this error should never show. If you're a user, god speed.)");
 };
 
 // prototype function
@@ -329,6 +332,14 @@ webrpg.Frame.prototype.render = function() {
     var entity = this.room.entities[i];
     room[entity.y][entity.x] = '<span style="color: ' + entity.color+'">' + webrpg.frameProperties.rmCharacter + '</span>';
   } 
+  for (var i = 0; i < this.room.tiles.length; i++) {
+    var tileRow = this.room.tiles[i];
+    for (var j = 0; j < tileRow.length; j++) {
+      if (tileRow[j].type === webrpg.tileTypes.warp) {
+        room[j][i] = '<span style="color: ' + webrpg.frameProperties.warpTileColor + '">' + webrpg.frameProperties.rmCharacter + '</span>';
+      }
+    }
+  }
   for (var i = 0; i < room.length; i++) {
     var str = '';
     var row = room[i];
@@ -374,6 +385,15 @@ webrpg.Frame.prototype.movePlayer = function(direction) {
       webrpg.player.x = px;
       webrpg.player.y = py;
     }
+  }
+  if (this.room.tiles[webrpg.player.x][webrpg.player.y].type === webrpg.tileTypes.warp) {
+    var tile = this.room.tiles[webrpg.player.x][webrpg.player.y];
+    var index = this.room.entities.indexOf(webrpg.player);
+    if (index > -1) this.room.entities.splice(index,1);
+    webrpg.player.x = tile.destX;
+    webrpg.player.y = tile.destY;
+    this.room = webrpg.rooms[tile.roomIndex];
+    this.room.entities.push(webrpg.player);
   }
   this.render();
 };
